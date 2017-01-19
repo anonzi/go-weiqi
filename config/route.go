@@ -2,33 +2,26 @@
 package config
 
 import (
-  "fmt"
   "net/http"
-  "encoding/json"
   "go-weiqi/app/controllers"
 )
 
 type Route struct {
 }
 
-func InitRoute() *Route {
+func NewRoute() *Route {
   route := &Route{}
   return route
 }
 
-type BaseJsonBean struct {
-  Code    int         `json:"code"`
-  Data    interface{} `json:"data"`
-  Message string      `json:"message"`
-}
-
-func NewBaseJsonBean() *BaseJsonBean {
-  return &BaseJsonBean{}
-}
-
-func (p *Route) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (route *Route) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  homeController := controller.NewHomeController()
   if r.URL.Path == "/" {
-    controller.sayhelloName(w, r)
+    homeController.Index(w, r)
+    return
+  }
+  if r.URL.Path == "/test" {
+    homeController.Test(w, r)
     return
   }
   http.NotFound(w, r)
