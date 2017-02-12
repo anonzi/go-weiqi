@@ -4,6 +4,7 @@ package config
 import (
   "net/http"
   "go-weiqi/app/controllers"
+  "fmt"
 )
 
 type Route struct {
@@ -15,13 +16,15 @@ func NewRoute() *Route {
 }
 
 func (route *Route) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-  homeController := controller.NewHomeController()
+  homeController := controller.NewHomeController(w, r)
+  fmt.Println("Start Request")
+  defer fmt.Println("End Request")
   if r.URL.Path == "/" {
-    homeController.Index(w, r)
+    homeController.Index()
     return
   }
   if r.URL.Path == "/test" {
-    homeController.Test(w, r)
+    homeController.Test()
     return
   }
   http.NotFound(w, r)
